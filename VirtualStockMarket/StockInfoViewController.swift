@@ -11,7 +11,7 @@ import FirebaseAuth
 import Firebase
 import Charts
 
-class StockInfoViewController: UIViewController {
+class StockInfoViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     var symbol: String!
     var name: String!
     var high: Float!
@@ -50,9 +50,6 @@ class StockInfoViewController: UIViewController {
     @IBOutlet weak var totalReturnLabel: UILabel!
     
     var dayInPriceGraph = 7;
-    var dayInTechnicalGraph = 7;
-    var indicators = ["MA", "EMA", "RSI", "MACD"]
-    var currentIndicator = "MA"
     
     @IBAction func WeekPrice(_ sender: Any) {
         dayInPriceGraph = 7
@@ -75,8 +72,71 @@ class StockInfoViewController: UIViewController {
         updatePriceGraph()
     }
     
-
+    
+    @IBOutlet weak var indicatorTextField: UITextField!
+    
+    func createPickerView() {
+        let pickerView = UIPickerView()
+        pickerView.delegate = self
+        indicatorTextField.inputView = pickerView
+    }
+    
+    func dismissPickerView() {
+       let toolBar = UIToolbar()
+       toolBar.sizeToFit()
+       let button = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(self.closeSelection))
+       toolBar.setItems([button], animated: true)
+       toolBar.isUserInteractionEnabled = true
+       indicatorTextField.inputAccessoryView = toolBar
+    }
+    
+    @objc func closeSelection() {
+        view.endEditing(true)
+        updateTechnicalIndicatorGraph()
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return indicators.count
+    }
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return indicators[row] // dropdown item
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        currentIndicator = indicators[row] // selected item
+        indicatorTextField.text = currentIndicator
+    }
+    
+    var dayInTechnicalGraph = 7;
+    var indicators = ["Moving Average(5)", "Exponential Moving Average(5)", "Relative Strength Index(14)", "Moving Average Convergence Divergence(12, 26, 9)"]
+    var currentIndicator = "Moving Average(5)"
+    
+    
+    @IBAction func OneWeekTechnical(_ sender: Any) {
+        dayInTechnicalGraph = 7
+        updateTechnicalIndicatorGraph()
+    }
+    @IBAction func OneMonthTechnical(_ sender: Any) {
+        dayInTechnicalGraph = 30
+        updateTechnicalIndicatorGraph()
+    }
+    @IBAction func ThreeMonthTechnical(_ sender: Any) {
+        dayInTechnicalGraph = 90
+        updateTechnicalIndicatorGraph()
+    }
+    @IBAction func SixMonthTechnical(_ sender: Any) {
+        dayInTechnicalGraph = 180
+        updateTechnicalIndicatorGraph()
+    }
+    @IBAction func YearTechnical(_ sender: Any) {
+        dayInTechnicalGraph = 365
+        updateTechnicalIndicatorGraph()
+    }
+    
     @IBOutlet weak var PriceChart: LineChartView!
+    @IBOutlet weak var TechnicalIndicatorChart: LineChartView!
     @IBOutlet weak var changeLabel: UILabel!
 
     @IBOutlet weak var buyButton: UIButton!
@@ -118,6 +178,8 @@ class StockInfoViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        createPickerView()
+        dismissPickerView()
         mostRecentStockPrices = fetchStockData1Year(symbol: symbol)
         updatePriceGraph()
         (macd, macdSignal) = fetchMACEData1Year(symbol: symbol)
@@ -197,18 +259,6 @@ class StockInfoViewController: UIViewController {
     }
 
     func getStockData(symbol: String) {
-//        let url = URL(string: "https://api.worldtradingdata.com/api/v1/stock?symbol=" + symbol + "&api_token=" + APIKeyWTD)
-//        let data = try? Data(contentsOf: url!)
-//        let APIResults = try? JSONDecoder().decode(APIResultsStockRealTime.self, from: data!)
-//        if APIResults == nil {
-//            return
-//        }
-//        yearHigh = APIResults!.data[0].yearHigh
-//        yearLow = APIResults!.data[0].yearLow
-//        volume = APIResults!.data[0].volume
-//        volumeAvg = APIResults!.data[0].volumeAvg
-//        getCloseHighLow(symbol: symbol)
-  
         getStockName()
         let url = URL(string: "https://api.twelvedata.com/time_series?symbol=" + symbol + "&apikey=" + APIKeyTwelveData + "&interval=1day&outputsize=1095")
         let data = try? Data(contentsOf: url!)
@@ -230,16 +280,6 @@ class StockInfoViewController: UIViewController {
         volume = APIResults!.values[0].volume
         
     }
-
-//    func getCloseHighLow(symbol: String) {
-//        let url = URL(string: "https://api.worldtradingdata.com/api/v1/history?symbol=" + symbol + "&api_token=" + APIKeyWTD)
-//        let data = try? Data(contentsOf: url!)
-//        let APIResults = try! JSONDecoder().decode(APIResultsStockIntraday.self, from: data!)
-//        let mostRecentResult = APIResults.history.max { a, b in a.key < b.key }
-//        close = mostRecentResult!.value.close
-//        high = mostRecentResult!.value.high
-//        low = mostRecentResult!.value.low
-//    }
 
     @IBAction func buy_stock(_ sender: Any) {
         if Auth.auth().currentUser != nil {
@@ -375,13 +415,13 @@ class StockInfoViewController: UIViewController {
       }
     
     func updateTechnicalIndicatorGraph() {
-        if currentIndicator == "MACE" {
+        if currentIndicator == "Moving Average Convergence Divergence(12, 26, 9)" {
            updateMACDGraph()
-        } else if currentIndicator == "MA" {
+        } else if currentIndicator == "Moving Average(5)" {
             updateMAGraph()
-        } else if currentIndicator == "RSI" {
+        } else if currentIndicator == "Relative Strength Index(14)" {
             updateRSIGraph()
-        } else if currentIndicator == "EMA" {
+        } else if currentIndicator == "Exponential Moving Average(5)" {
             updateEMAGraph()
         }
     }
@@ -438,9 +478,9 @@ class StockInfoViewController: UIViewController {
         data.addDataSet(macdSignalLine)
         data.setDrawValues(false)
 
-        PriceChart.data = data
-        PriceChart.legend.enabled = false
-        PriceChart.rightAxis.drawLabelsEnabled = false
+        TechnicalIndicatorChart.data = data
+        TechnicalIndicatorChart.legend.enabled = false
+        TechnicalIndicatorChart.rightAxis.drawLabelsEnabled = false
     }
     
     func updateMAGraph() {
@@ -473,9 +513,9 @@ class StockInfoViewController: UIViewController {
         data.addDataSet(maLine)
         data.setDrawValues(false)
 
-        PriceChart.data = data
-        PriceChart.legend.enabled = false
-        PriceChart.rightAxis.drawLabelsEnabled = false
+        TechnicalIndicatorChart.data = data
+        TechnicalIndicatorChart.legend.enabled = false
+        TechnicalIndicatorChart.rightAxis.drawLabelsEnabled = false
     }
     
     func updateRSIGraph() {
@@ -508,9 +548,9 @@ class StockInfoViewController: UIViewController {
         data.addDataSet(rsiLine)
         data.setDrawValues(false)
 
-        PriceChart.data = data
-        PriceChart.legend.enabled = false
-        PriceChart.rightAxis.drawLabelsEnabled = false
+        TechnicalIndicatorChart.data = data
+        TechnicalIndicatorChart.legend.enabled = false
+        TechnicalIndicatorChart.rightAxis.drawLabelsEnabled = false
     }
     
     func updateEMAGraph() {
@@ -543,9 +583,9 @@ class StockInfoViewController: UIViewController {
         data.addDataSet(emaLine)
         data.setDrawValues(false)
 
-        PriceChart.data = data
-        PriceChart.legend.enabled = false
-        PriceChart.rightAxis.drawLabelsEnabled = false
+        TechnicalIndicatorChart.data = data
+        TechnicalIndicatorChart.legend.enabled = false
+        TechnicalIndicatorChart.rightAxis.drawLabelsEnabled = false
     }
     
     func get_watchlist(completion: @escaping(Array<String>) -> ()) {

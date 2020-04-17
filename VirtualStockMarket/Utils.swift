@@ -11,38 +11,6 @@ var APIKeyAV = "LIV7ZLBBYMUUB3T6"
 var APIKeyWTD = "ozyaUTY1q1mtFjw2GjKyUVGdlxCemraRkl6wkz7aVHGNz9fXeSXH6HTlbIL9"
 var APIKeyTwelveData = "eea7857f8c904b4f92efc71c6d19e57b"
 
-//func fetchStockData2Days(symbol: String) -> Array<Float> {
-//    var mostRecentPrices: Array<Float> = []
-//    let url = URL(string: "https://api.worldtradingdata.com/api/v1/history?symbol=" + symbol + "&api_token=" + APIKeyWTD)
-//    let data = try? Data(contentsOf: url!)
-//    let APIResults = try? JSONDecoder().decode(APIResultsStockIntraday.self, from: data!)
-//    if APIResults == nil {
-//        return []
-//    }
-//    let mostRecentDays = APIResults!.history.sorted(by: { $0.key > $1.key })
-//    for stockResult in mostRecentDays {
-//        mostRecentPrices.append(stockResult.value.close)
-//        if mostRecentPrices.count == 2 { break}
-//    }
-//    return mostRecentPrices
-//}
-
-//func fetchStockData3Year(symbol: String) -> Array<Float> {
-//    var mostRecentPrices: Array<Float> = []
-//    let url = URL(string: "https://api.worldtradingdata.com/api/v1/history?symbol=" + symbol + "&api_token=" + APIKeyWTD)
-//    let data = try? Data(contentsOf: url!)
-//    let APIResults = try? JSONDecoder().decode(APIResultsStockIntraday.self, from: data!)
-//    if APIResults == nil {
-//        return []
-//    }
-//    let mostRecentDays = APIResults!.history.sorted(by: { $0.key > $1.key })
-//    for stockResult in mostRecentDays {
-//        mostRecentPrices.append(stockResult.value.close)
-//        if mostRecentPrices.count == 1095 { break}
-//    }
-//    return mostRecentPrices
-//}
-
 func fetchStockData2Days(symbol: String) -> Array<Float> {
     var mostRecentPrices: Array<Float> = []
     let url = URL(string: "https://api.twelvedata.com/time_series?symbol=" + symbol + "&apikey=" + APIKeyTwelveData + "&interval=1day&outputsize=2")
@@ -103,7 +71,7 @@ func fetchMAData1Year(symbol: String) -> Array<Float>{
 
 func fetchRSIData1Year(symbol: String) -> Array<Float>{
     var rsi: Array<Float> = []
-    let url = URL(string: "https://api.twelvedata.com/rsi?symbol=" + symbol + "&interval=1day&time_period=5&outputsize=365&apikey=" + APIKeyTwelveData)
+    let url = URL(string: "https://api.twelvedata.com/rsi?symbol=" + symbol + "&interval=1day&time_period=14&outputsize=365&apikey=" + APIKeyTwelveData)
     let data = try? Data(contentsOf: url!)
     let APIResults = try? JSONDecoder().decode(TechnicalIndicatorRSI.self, from: data!)
     if APIResults == nil {

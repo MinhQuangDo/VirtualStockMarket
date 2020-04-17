@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hN3-cN-NzW">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hN3-cN-NzW">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -634,38 +634,38 @@
                                                 <items>
                                                     <barButtonItem title="1W" width="81" id="OdE-Kx-5rc">
                                                         <connections>
-                                                            <action selector="WeekPrice:" destination="Qnz-mD-zxY" id="FeI-J8-JZ5"/>
+                                                            <action selector="OneWeekTechnical:" destination="Qnz-mD-zxY" id="h9N-Mp-gZi"/>
                                                         </connections>
                                                     </barButtonItem>
                                                     <barButtonItem title="1M" width="76.5" id="F4b-Iy-heH">
                                                         <connections>
-                                                            <action selector="OneMonthPrice:" destination="Qnz-mD-zxY" id="kQx-en-4hQ"/>
+                                                            <action selector="OneMonthTechnical:" destination="Qnz-mD-zxY" id="Cp2-4V-V15"/>
                                                         </connections>
                                                     </barButtonItem>
                                                     <barButtonItem title="3M" width="81" id="d2n-nc-MyJ">
                                                         <connections>
-                                                            <action selector="ThreeMonthPrice:" destination="Qnz-mD-zxY" id="MTB-pf-KbQ"/>
+                                                            <action selector="ThreeMonthTechnical:" destination="Qnz-mD-zxY" id="MZm-YN-EZM"/>
                                                         </connections>
                                                     </barButtonItem>
                                                     <barButtonItem title="6M" width="114.5" id="5Dp-8B-JFF">
                                                         <connections>
-                                                            <action selector="SixMonthPrice:" destination="Qnz-mD-zxY" id="2Zq-Sh-cxE"/>
+                                                            <action selector="SixMonthTechnical:" destination="Qnz-mD-zxY" id="G4V-Qb-etz"/>
                                                         </connections>
                                                     </barButtonItem>
                                                     <barButtonItem title="1Y" width="84.5" id="J0z-lg-yeG" userLabel="3Y">
                                                         <connections>
-                                                            <action selector="YearPrice:" destination="Qnz-mD-zxY" id="4v3-d1-elr"/>
+                                                            <action selector="YearTechnical:" destination="Qnz-mD-zxY" id="oR5-GI-mJM"/>
                                                         </connections>
                                                     </barButtonItem>
                                                 </items>
                                                 <color key="barTintColor" cocoaTouchSystemColor="darkTextColor"/>
                                             </toolbar>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pKN-Dy-gcZ">
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Moving Average(5)" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="pKN-Dy-gcZ">
                                                 <rect key="frame" x="27" y="575" width="361" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="h68-bR-oaq"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </textField>
                                         </subviews>
@@ -1930,6 +1930,7 @@
                     <size key="freeformSize" width="414" height="1775"/>
                     <connections>
                         <outlet property="PriceChart" destination="db4-JY-NgS" id="Osg-1p-d5Y"/>
+                        <outlet property="TechnicalIndicatorChart" destination="U7G-nr-b9P" id="ilj-W7-nF0"/>
                         <outlet property="Volume" destination="rwt-D8-4L0" id="2MX-GD-Aej"/>
                         <outlet property="avgCostLabel" destination="L4Q-Z4-9nd" id="TfI-Zd-fai"/>
                         <outlet property="buyButton" destination="cO9-rg-s8X" id="U1h-I5-wuy"/>
@@ -1937,6 +1938,7 @@
                         <outlet property="currentLabel" destination="M16-nU-vmr" id="eYf-Tr-oQt"/>
                         <outlet property="highLabel" destination="0dj-1B-EhA" id="Fee-hC-nXf"/>
                         <outlet property="highYlabel" destination="yUN-3m-iOv" id="3HT-px-n1p"/>
+                        <outlet property="indicatorTextField" destination="pKN-Dy-gcZ" id="e9b-XM-NRF"/>
                         <outlet property="lowLabel" destination="fcT-31-QNM" id="YvD-vh-ZRj"/>
                         <outlet property="lowYlabel" destination="Igt-CF-a2C" id="Jaq-KD-TXF"/>
                         <outlet property="nameLabel" destination="OBx-vk-Vte" id="E6N-IT-bBs"/>
