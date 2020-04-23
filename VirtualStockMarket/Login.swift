@@ -9,6 +9,7 @@
 import UIKit
 import FirebaseAuth
 import Firebase
+import FirebaseCrashlytics
 
 class Login: UIViewController {
 
@@ -77,6 +78,8 @@ class Login: UIViewController {
       
 
     @IBAction func login(_ sender: UIButton) {
+        
+        
         
         let email = self.email.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         

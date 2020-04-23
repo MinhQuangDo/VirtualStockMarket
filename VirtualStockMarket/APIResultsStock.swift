@@ -8,12 +8,6 @@
 
 import UIKit
 
-
-//struct APIResultsStockIntraday: Decodable {
-//    let name: String;
-//    let history: [String: StockIntraday]
-//}
-
 struct APIResultsStockHistory: Decodable {
     let values: [StockHistory]
 }
