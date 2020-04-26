@@ -177,16 +177,23 @@ class StockInfoViewController: UIViewController, UIPickerViewDelegate, UIPickerV
 
 
     override func viewDidLoad() {
+        PriceChart.noDataText = "Chart Loading..."
+        TechnicalIndicatorChart.noDataText = "Chart Loading..."
         super.viewDidLoad()
         createPickerView()
         dismissPickerView()
-        mostRecentStockPrices = fetchStockData1Year(symbol: symbol)
-        updatePriceGraph()
-        (macd, macdSignal) = fetchMACEData1Year(symbol: symbol)
-        ma = fetchMAData1Year(symbol: symbol)
-        rsi = fetchRSIData1Year(symbol: symbol)
-        ema = fetchEMAData1Year(symbol: symbol)
-        updateTechnicalIndicatorGraph()
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.mostRecentStockPrices = fetchStockData1Year(symbol: self.symbol)
+            (self.macd, self.macdSignal) = fetchMACEData1Year(symbol: self.symbol)
+            self.ma = fetchMAData1Year(symbol: self.symbol)
+            self.rsi = fetchRSIData1Year(symbol: self.symbol)
+            self.ema = fetchEMAData1Year(symbol: self.symbol)
+            DispatchQueue.main.async {
+                self.updatePriceGraph()
+                self.updateTechnicalIndicatorGraph()
+            }
+        }
+        
         
         high = 0.0
         low = 0.0
@@ -411,7 +418,11 @@ class StockInfoViewController: UIViewController, UIPickerViewDelegate, UIPickerV
 
         PriceChart.data = data
         PriceChart.legend.enabled = false
-        PriceChart.rightAxis.drawLabelsEnabled = false
+        PriceChart.xAxis.labelPosition = .bottom
+        PriceChart.rightAxis.enabled = false
+        PriceChart.leftAxis.drawGridLinesEnabled = false
+        PriceChart.leftAxis.drawLabelsEnabled = true
+        
       }
     
     func updateTechnicalIndicatorGraph() {
@@ -477,10 +488,13 @@ class StockInfoViewController: UIViewController, UIPickerViewDelegate, UIPickerV
         data.addDataSet(macdLine)
         data.addDataSet(macdSignalLine)
         data.setDrawValues(false)
-
+        
         TechnicalIndicatorChart.data = data
         TechnicalIndicatorChart.legend.enabled = false
-        TechnicalIndicatorChart.rightAxis.drawLabelsEnabled = false
+        TechnicalIndicatorChart.xAxis.labelPosition = .bottom
+        TechnicalIndicatorChart.rightAxis.enabled = false
+        TechnicalIndicatorChart.leftAxis.drawGridLinesEnabled = false
+        TechnicalIndicatorChart.leftAxis.drawLabelsEnabled = true
     }
     
     func updateMAGraph() {
@@ -515,7 +529,10 @@ class StockInfoViewController: UIViewController, UIPickerViewDelegate, UIPickerV
 
         TechnicalIndicatorChart.data = data
         TechnicalIndicatorChart.legend.enabled = false
-        TechnicalIndicatorChart.rightAxis.drawLabelsEnabled = false
+        TechnicalIndicatorChart.xAxis.labelPosition = .bottom
+        TechnicalIndicatorChart.rightAxis.enabled = false
+        TechnicalIndicatorChart.leftAxis.drawGridLinesEnabled = false
+        TechnicalIndicatorChart.leftAxis.drawLabelsEnabled = true
     }
     
     func updateRSIGraph() {
@@ -550,7 +567,10 @@ class StockInfoViewController: UIViewController, UIPickerViewDelegate, UIPickerV
 
         TechnicalIndicatorChart.data = data
         TechnicalIndicatorChart.legend.enabled = false
-        TechnicalIndicatorChart.rightAxis.drawLabelsEnabled = false
+        TechnicalIndicatorChart.xAxis.labelPosition = .bottom
+        TechnicalIndicatorChart.rightAxis.enabled = false
+        TechnicalIndicatorChart.leftAxis.drawGridLinesEnabled = false
+        TechnicalIndicatorChart.leftAxis.drawLabelsEnabled = true
     }
     
     func updateEMAGraph() {
@@ -585,7 +605,10 @@ class StockInfoViewController: UIViewController, UIPickerViewDelegate, UIPickerV
 
         TechnicalIndicatorChart.data = data
         TechnicalIndicatorChart.legend.enabled = false
-        TechnicalIndicatorChart.rightAxis.drawLabelsEnabled = false
+        TechnicalIndicatorChart.xAxis.labelPosition = .bottom
+        TechnicalIndicatorChart.rightAxis.enabled = false
+        TechnicalIndicatorChart.leftAxis.drawGridLinesEnabled = false
+        TechnicalIndicatorChart.leftAxis.drawLabelsEnabled = true
     }
     
     func get_watchlist(completion: @escaping(Array<String>) -> ()) {
